@@ -1,7 +1,7 @@
 // Exercício 1062 do beecrowd
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct No {
     int valor;

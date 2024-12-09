@@ -1,7 +1,7 @@
 // Exercício 1063 do beecrowd
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct No {
     char letra;
