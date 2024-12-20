@@ -1,25 +1,39 @@
+# Makefile para compilar os arquivos CSR ou Linearizada
+
 CC = gcc
-CFLAGS = -Wall -std=c99
+CFLAGS = -Wall -std=c99 -I./
 
-EXEC = prog
+MATRIX_TYPE ?= linearizada
 
-SRC_DIR = .
+SRCS_LINEARIZADA = main_linearizada.c linearizada.c
+OBJS_LINEARIZADA = $(SRCS_LINEARIZADA:.c=.o)
+EXEC_LINEARIZADA = prog_linearizada
+
+SRCS_CSR = main_csr.c csr.c
+OBJS_CSR = $(SRCS_CSR:.c=.o)
+EXEC_CSR = prog_csr
+
 OBJ_DIR = obj
 
-SRCS = $(SRC_DIR)/main.c $(SRC_DIR)/linearizada.c
+ifeq ($(MATRIX_TYPE), linearizada)
+  SRCS = $(SRCS_LINEARIZADA)
+  OBJS = $(OBJS_LINEARIZADA)
+  EXEC = $(EXEC_LINEARIZADA)
+else
+  SRCS = $(SRCS_CSR)
+  OBJS = $(OBJS_CSR)
+  EXEC = $(EXEC_CSR)
+endif
 
-OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+all: $(EXEC)
 
 $(EXEC): $(OBJS)
-	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)  # Cria o diretório de objetos caso não exista
+%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJ_DIR) $(EXEC)
+	rm -f $(OBJS) $(EXEC)
 
-rebuild: clean $(EXEC)
-
-.PHONY: clean rebuild
+.PHONY: all clean
